@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Palm Analysis Result</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Quicksand:wght@500;600&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Quicksand', sans-serif;
+      background: radial-gradient(ellipse at top left, #FFF0D9, #FFBC70);
+      background-attachment: fixed;
+      overflow-x: hidden;
+      position: relative;
+      z-index: 0;
+    }
+
+    /* Glowing animated orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: -1;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .orb:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      top: 5%;
+      left: 5%;
+      background: radial-gradient(circle, #ffddb0aa, transparent);
+      animation-delay: 0s;
+    }
+
+    .orb:nth-child(2) {
+      width: 400px;
+      height: 400px;
+      bottom: 5%;
+      right: 5%;
+      background: radial-gradient(circle, #ffe2a9aa, transparent);
+      animation-delay: 3s;
+    }
+
+    @keyframes float {
+      0% { transform: scale(1) translateY(0); opacity: 0.6; }
+      100% { transform: scale(1.2) translateY(-20px); opacity: 0.8; }
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 30px;
+      padding: 3rem;
+      margin-top: 3rem;
+      box-shadow: 0 15px 40px rgba(255, 130, 0, 0.2);
+      animation: fadeInUp 1.2s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      color: #D2691E;
+      font-weight: 700;
+      font-size: 3rem;
+      text-align: center;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    h1::after {
+      content: '';
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(to right, #ffa94d, #ff7b00);
+      display: block;
+      margin: 15px auto 0;
+      border-radius: 2px;
+    }
+
+    .img-thumbnail {
+      border: 4px solid #FF8C00;
+      border-radius: 25px;
+      box-shadow: 0 10px 25px rgba(255, 140, 0, 0.4);
+      transition: transform 0.3s ease;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .img-thumbnail:hover {
+      transform: scale(1.03);
+    }
+
+    .card {
+      background: #fff7e6;
+      border-left: 10px solid #ffae42;
+      border-radius: 20px;
+      margin-bottom: 2rem;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(255, 140, 0, 0.3);
+    }
+
+    .card-header {
+      background: #ffe5b4;
+      color: #b35000;
+      font-size: 1.6rem;
+      font-weight: 600;
+      border-radius: 20px 20px 0 0;
+    }
+
+    .card-body {
+      color: #5f2c0b;
+      font-size: 1.05rem;
+    }
+
+    .card-body ul {
+      padding-left: 1.2rem;
+    }
+
+    .btn-success {
+      background: linear-gradient(to right, #ff8400, #ff6600);
+      border: none;
+      font-size: 1.3rem;
+      padding: 0.9rem 3rem;
+      border-radius: 50px;
+      color: white;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0 8px 20px rgba(255, 102, 0, 0.3);
+    }
+
+    .btn-success:hover {
+      background: linear-gradient(to right, #ff6600, #cc5500);
+      transform: scale(1.05);
+      box-shadow: 0 12px 25px rgba(204, 85, 0, 0.4);
+    }
+
+    .text-center.mt-4 {
+      margin-top: 3rem !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Glowing Orbs -->
+  <div class="orb"></div>
+  <div class="orb"></div>
+
+  <main class="container">
+    <h1>Your Palm Analysis</h1>
+
+    <div class="text-center mb-5">
+      <img src="{{ url_for('static', filename='images/uploads/' ~ image_name) }}" alt="Uploaded Palm Image" class="img-thumbnail">
+    </div>
+
+    {% for line, details in result.items() %}
+      <div class="card">
+        <div class="card-header">
+          {{ line | capitalize }} Line
+        </div>
+        <div class="card-body">
+          <p><strong>Length:</strong> {{ details.length }}</p>
+          <p><strong>Depth:</strong> {{ details.depth }}</p>
+          <h5>Life Predictions:</h5>
+          <ul>
+            {% for statement in details.predictions %}
+              <li>{{ statement }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    {% endfor %}
+
+    <div class="text-center mt-4">
+      <a href="{{ url_for('thankyou') }}" class="btn btn-success btn-lg">Proceed</a>
+    </div>
+  </main>
+  
+</body>
+</html>

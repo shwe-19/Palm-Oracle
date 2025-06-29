@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Your Palm</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Quicksand', sans-serif;
+      overflow: hidden;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ff6f00, #ff9100, #ffb300);
+      background-size: 300% 300%;
+      animation: intenseBackground 15s ease infinite;
+      position: relative;
+      z-index: 0;
+    }
+
+    @keyframes intenseBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: -1;
+      filter: blur(40px);
+      opacity: 0.5;
+    }
+
+    .orb:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      top: 10%;
+      left: 15%;
+      background: radial-gradient(circle, #ff8f00 0%, transparent 70%);
+      animation: floatOrb 10s ease-in-out infinite alternate;
+    }
+
+    .orb:nth-child(2) {
+      width: 350px;
+      height: 350px;
+      bottom: 10%;
+      right: 15%;
+      background: radial-gradient(circle, #ffcc80 0%, transparent 70%);
+      animation: floatOrb 12s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes floatOrb {
+      0% {
+        transform: scale(1) translateY(0);
+        opacity: 0.6;
+      }
+      100% {
+        transform: scale(1.2) translateY(-25px);
+        opacity: 0.8;
+      }
+    }
+
+    .container {
+      background-color: #fffaf3;
+      padding: 50px;
+      border-radius: 20px;
+      max-width: 620px;
+      width: 100%;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 1.2s ease;
+      position: relative;
+      z-index: 2;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      color: #ff6f00;
+      font-weight: 700;
+      font-size: 2.8rem;
+      margin-bottom: 30px;
+      text-align: center;
+      position: relative;
+    }
+
+    h1::after {
+      content: '';
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(to right, #ff9100, #ffcc80);
+      display: block;
+      margin: 12px auto 0;
+      border-radius: 2px;
+    }
+
+    label {
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 8px;
+    }
+
+    .form-control,
+    .form-control-file {
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 1rem;
+      border: 1px solid #ffa155;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .form-control:focus {
+      border-color: #ff6f00;
+      box-shadow: 0 0 0 0.2rem rgba(255, 111, 0, 0.25);
+    }
+
+    .btn-custom {
+      background: linear-gradient(to right, #ff6f00, #ff9100);
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      padding: 14px 30px;
+      border-radius: 10px;
+      margin-top: 20px;
+      transition: all 0.4s ease;
+      width: 100%;
+      box-shadow: 0 10px 25px rgba(255, 111, 0, 0.35);
+    }
+
+    .btn-custom:hover {
+      background: linear-gradient(to right, #ff9100, #ff6f00);
+      box-shadow: 0 15px 40px rgba(255, 111, 0, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .form-group {
+      margin-bottom: 22px;
+    }
+
+    .alert-danger {
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="orb"></div>
+  <div class="orb"></div>
+
+  <div class="container">
+    <h1>Upload Your Palm Image</h1>
+
+    {% if error %}
+      <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="palm_image">Choose Palm Image:</label>
+        <input type="file" class="form-control-file" name="palm_image" id="palm_image" required>
+      </div>
+
+      <div class="form-group">
+        <label for="gender">Select Gender:</label>
+        <select class="form-control" name="gender" id="gender" required>
+          <option value="" disabled selected>Choose gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="hand">Select Hand (Right for Male, Left for Female):</label>
+        <select class="form-control" name="hand" id="hand" required>
+          <option value="" disabled selected>Choose hand</option>
+          <option value="right">Right</option>
+          <option value="left">Left</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-custom">Submit</button>
+    </form>
+  </div>
+</body>
+</html>
