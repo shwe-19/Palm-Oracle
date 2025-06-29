@@ -14,25 +14,21 @@
 
 ---
 
-## 📸 Screenshots
+ 📸 Screenshots
+ 🖼️ Welcome Page
+![Welcome Page](screenshots/welcome_page.png)
 
-> You can add these screenshots in a folder named `screenshots/`:
-- Upload page
-- Result page with predictions
-- Thank You page
-
-Example:
-
- 🖼️ Upload Page
+ 📤 Upload Page
 ![Upload Page](screenshots/upload_page.png)
 
- 📊 Result Page
-![Result Page](screenshots/result_page.png)
+ 📊 Palm Result – Part 1
+![Result Page 1](screenshots/result_1.png)
+
+ 📊 Palm Result – Part 2
+![Result Page 2](screenshots/result_2.png)
 
  ✅ Thank You Page
 ![Thank You](screenshots/thankyou_page.png)
-
----
 
  🚀 Getting Started
 
